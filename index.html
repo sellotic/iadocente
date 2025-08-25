@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Curso: Inteligencia Artificial Generativa para la Gestión Docente</title>
+    <title>Curso gratuito: Inteligencia Artificial Generativa para la Gestión Docente</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -73,7 +73,7 @@
                 icon: 'info',
                 title: "Descripción del Curso",
                 details: [
-                    "Curso: Inteligencia Artificial Generativa para la Gestión Docente",
+                    "Curso gratuito: Inteligencia Artificial Generativa para la Gestión Docente",
                     "Duración total: 20 horas (asincrónicas, sincrónicas optativas y de trabajo autónomo)",
                     "Destinatarios: Docentes de cualquier disciplina y nivel educativo."
                 ],
@@ -182,16 +182,15 @@
                             <i data-lucide="x" class="w-6 h-6"></i>
                         </button>
                     </div>
-                    <nav class="flex-grow">
+                    <nav> <!-- Se eliminó flex-grow para que el botón suba -->
                         <ul>${navListHTML}</ul>
                     </nav>
-                    <div class="mt-4">
-                        <a href="https://forms.gle/cGMrbJnEtpi1BGD97" target="_blank" rel="noopener noreferrer" class="block bg-sky-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-sky-700 transition-all duration-300 shadow-lg text-center transform hover:scale-105">
+                    <div class="mt-8"> <!-- Se aumentó el margen superior para separar del menú -->
+                        <a href="https://forms.gle/cGMrbJnEtpi1BGD97" target="_blank" rel="noopener noreferrer" class="block bg-red-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-red-700 transition-all duration-300 shadow-lg text-center transform hover:scale-105">
                             Inscripciones
                         </a>
                     </div>
                     <div class="mt-auto text-center text-xs text-gray-400 pt-4">
-                        <p>Capacitación Docente 2025</p>
                     </div>
                 </div>
             `;
@@ -346,7 +345,7 @@
         // --- Inicialización y asignación de eventos ---
         document.addEventListener('DOMContentLoaded', () => {
             // Establecer el título del curso en la cabecera
-            courseTitleHeader.textContent = courseData.descripcion.details[0].replace('Curso: ', '');
+            courseTitleHeader.textContent = courseData.descripcion.details[0];
 
             // Renderizar el estado inicial
             renderSidebar();
