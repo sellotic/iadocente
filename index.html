@@ -1,293 +1,373 @@
-import React, { useState } from 'react';
-import { BookOpen, Target, Puzzle, Users, Film, Award, Cpu, Menu, X, User, Info } from 'lucide-react';
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curso: Inteligencia Artificial Generativa para la Gestión Docente</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 
-// --- URLs de los Logos y Enlaces---
-const logo1Url = "https://roxanarebolledo.com/images/logo1DGVM.png";
-const logo1Link = "https://upla.cl/vinculacion/";
-const logo2Url = "https://roxanarebolledo.com/images/logo2Fondo2025.png";
-const logo2Link = "https://upla.cl/vinculacion/2024/12/04/convocatoria-fondo-social-crealab-2025/";
-const logo3Url = "https://upla.cl/facultad/cienciasnaturalesyexactas/wp-content/uploads/2022/09/05-fac-cs-naturales.png";
-const logo3Link = "https://upla.cl/facultad/cienciasnaturalesyexactas/";
-const sidebarImageUrl = "https://revistamarina.cl/storage/app/uploads/public/cbe/c1f/46b/thumb__844_406_0_0_crop.jpg";
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
 
+    <style>
+        /* Estilos personalizados para aplicar la fuente y mejorar la apariencia */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Transición suave para la barra lateral */
+        .sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
 
-// --- Datos del Curso (Actualizados) ---
-const courseData = {
-  descripcion: {
-    icon: Info,
-    title: "Descripción del Curso",
-    details: [
-        "Curso: Inteligencia Artificial Generativa para la Gestión Docente",
-        "Duración total: 20 horas (asincrónicas, sincrónicas optativas y de trabajo autónomo)",
-        "Destinatarios: Docentes de cualquier disciplina y nivel educativo."
-    ],
-    objectiveTitle: "Objetivo General",
-    objectiveContent: "Desarrollar habilidades y conocimientos para integrar eficazmente herramientas de Inteligencia Artificial en la gestión docente, optimizando la creación de recursos, automatización de tareas, acompañamiento al estudiantado y procesos de evaluación."
-  },
-  bloque1: {
-    icon: BookOpen,
-    title: "1: Aprendizaje adaptativo",
-    content: "Descubre cómo utilizar la IA para crear rutas de aprendizaje personalizadas que se ajustan al ritmo y estilo de cada estudiante. Se explorarán herramientas para generar material didáctico que responda a las necesidades individuales, fomentando un aprendizaje más profundo y significativo."
-  },
-  bloque2: {
-    icon: Cpu,
-    title: "2: Automatización de tareas",
-    content: "Aprende a optimizar tu tiempo utilizando la IA para automatizar tareas administrativas y repetitivas. Desde la planificación de clases y la creación de presentaciones, hasta la gestión de comunicaciones y la organización de recursos, este módulo te enseñará a delegar trabajo a la tecnología para centrarte en lo que más importa: la enseñanza."
-  },
-  bloque3: {
-    icon: Award,
-    title: "3: Evaluación de proceso y resultado",
-    content: "Explora cómo la IA puede transformar los procesos de evaluación. Se abordará la creación de instrumentos de evaluación formativa y sumativa, la generación de rúbricas detalladas y la entrega de retroalimentación automatizada y personalizada, permitiendo un seguimiento más eficiente y detallado del progreso del estudiantado."
-  },
-  bloque4: {
-    icon: Puzzle,
-    title: "4: Juegos interactivos",
-    content: "Sumérgete en el mundo de la gamificación y aprende a diseñar experiencias de aprendizaje lúdicas. Este módulo te enseñará a utilizar herramientas de IA para crear juegos interactivos que capturen la atención de los estudiantes y refuercen los contenidos curriculares de manera entretenida y efectiva."
-  },
-  evaluacion: {
-    icon: Award,
-    title: "Evaluación Final Integradora",
-    content: "Diseño de una propuesta de integración de IA en su práctica docente, que debe incluir:",
-    details: [
-      "Una actividad de aprendizaje adaptativo diseñada con IA.",
-      "Un ejemplo de tarea administrativa automatizada.",
-      "Un instrumento de evaluación innovador generado con IA.",
-      "Diseño de juego interactivo."
-    ],
-    summary: "La presentación de esta propuesta demostrará la aplicación práctica de las herramientas y estrategias aprendidas en el curso."
-  },
-  relatora: {
-    icon: User,
-    title: "Docente a cargo",
-    content: "",
-    name: "Roxana Rebolledo Font de la Vall",
-    details: [
-      "Profesora de Inglés y Licenciada en Educación",
-      "Magíster en Comunicación Educativa y NTIC",
-      "Doctora (c) en Tecnología Educativa",
-      "Certificada en Moodle (MEC)"
-    ],
-    website: "roxanarebolledo.com",
-    experienceUrl: "https://roxanarebolledo.com/experiencia",
-    videoUrl: "https://www.youtube.com/embed/TaLu30YkTTg?si=HB-avSZ1-1GT2tkx"
-  }
-};
+    <div id="app-container" class="flex h-screen bg-gray-100 font-sans">
+        <!-- Overlay for mobile -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-20 lg:hidden hidden"></div>
 
-// --- Componente de Navegación (Sidebar) ---
-const Sidebar = ({ activeSection, setActiveSection, setSidebarOpen }) => {
-  const navItems = [
-    { id: 'descripcion', label: 'Descripción del Curso' },
-    { id: 'bloque1', label: '1: Aprendizaje Adaptativo' },
-    { id: 'bloque2', label: '2: Automatización de Tareas' },
-    { id: 'bloque3', label: '3: Evaluación de Proceso' },
-    { id: 'bloque4', label: '4: Juegos Interactivos' },
-    { id: 'evaluacion', label: 'Evaluación Final' },
-    { id: 'relatora', label: 'Docente a cargo' },
-  ];
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar fixed lg:relative inset-y-0 left-0 transform -translate-x-full lg:translate-x-0 w-72 h-full z-30 shadow-2xl lg:shadow-none">
+            <!-- El contenido de la barra lateral se generará con JavaScript -->
+        </aside>
 
-  return (
-    <div className="w-full h-full bg-white text-gray-800 p-5 flex flex-col border-r border-gray-200">
-      <div className="relative mb-6 pb-4 border-b">
-        <img src={sidebarImageUrl} alt="Cabecera del curso" className="w-full rounded-lg" />
-        <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-gray-600 hover:text-gray-900 absolute top-2 right-2 bg-white/70 backdrop-blur-sm rounded-full p-1">
-            <X size={24} />
-        </button>
-      </div>
-      <nav className="flex-grow">
-        <ul>
-          {navItems.map(item => {
-            const Icon = courseData[item.id]?.icon;
-            if (!Icon) return null;
-            const isActive = activeSection === item.id;
-            return (
-              <li key={item.id} className="mb-2">
-                <a
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setActiveSection(item.id);
-                    setSidebarOpen(false);
-                  }}
-                  className={`flex items-center p-3 rounded-lg transition-all duration-300 transform hover:scale-105 ${
-                    isActive
-                      ? 'bg-sky-500 text-white shadow-lg'
-                      : 'hover:bg-sky-100 text-gray-700'
-                  }`}
-                >
-                  <Icon size={20} className="mr-3 flex-shrink-0" />
-                  <span className="font-medium">{item.label}</span>
-                </a>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
-      <div className="mt-4">
-        <a 
-          href="https://forms.gle/cGMrbJnEtpi1BGD97"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block bg-sky-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-sky-700 transition-all duration-300 shadow-lg text-center transform hover:scale-105"
-        >
-          Inscripciones
-        </a>
-      </div>
-      <div className="mt-auto text-center text-xs text-gray-400 pt-4">
-        <p>Capacitación Docente 2025</p>
-      </div>
-    </div>
-  );
-};
-
-// --- Componente de Contenido Principal ---
-const Content = ({ sectionId }) => {
-  const section = courseData[sectionId];
-  if (!section) return null;
-
-  const { icon: Icon, title, content, name, details, summary, website, videoUrl, experienceUrl, objectiveTitle, objectiveContent } = section;
-
-  return (
-    <div className="p-6 sm:p-8 lg:p-10 w-full overflow-y-auto bg-sky-50">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-center text-gray-800 mb-6">
-          <div className="p-3 bg-white rounded-full shadow-md mr-4">
-            <Icon size={32} className="text-sky-600" />
-          </div>
-          <h1 className="text-3xl lg:text-4xl font-bold tracking-tight">{title}</h1>
-        </div>
-        
-        <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-200">
-          {content && <p className="text-lg text-gray-700 leading-relaxed mb-6">{content}</p>}
-
-          {name && <h2 className="text-2xl font-semibold text-gray-800 mb-4">{name}</h2>}
-
-          {objectiveTitle && objectiveContent && (
-            <div className="mb-6">
-              <h3 className="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
-                <Target className="mr-3 text-sky-600" />
-                {objectiveTitle}
-              </h3>
-              <p className="text-lg text-gray-700 leading-relaxed">{objectiveContent}</p>
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col h-screen">
+            <!-- Main Header -->
+            <div class="w-full bg-gradient-to-r from-sky-400 to-sky-600 p-4 shadow-lg border-b border-sky-700 z-10 flex items-center justify-center relative">
+                <button id="menu-button" class="lg:hidden text-white absolute left-4">
+                    <i data-lucide="menu" class="w-7 h-7"></i>
+                </button>
+                <h1 id="course-title-header" class="text-xl md:text-3xl font-bold text-white text-center tracking-wide">
+                    <!-- Título del curso se cargará aquí -->
+                </h1>
             </div>
-          )}
 
-          {details && (
-            <div className={`${objectiveTitle ? 'mt-6 pt-6 border-t border-gray-200' : 'mb-6'}`}>
-              <ul className="space-y-3">
-                {details.map((detail, index) => (
-                  <li key={index} className="flex items-start">
-                    <div className="flex-shrink-0 h-6 w-6 rounded-full bg-sky-100 text-sky-700 flex items-center justify-center mr-3 mt-1">
-                        <span className="font-bold text-sm">✓</span>
+            <!-- Content Area -->
+            <div id="content-area" class="flex-1 overflow-y-auto">
+                <!-- El contenido de la sección activa se generará con JavaScript -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // --- URLs de los Logos y Enlaces ---
+        const logo1Url = "https://roxanarebolledo.com/images/logo1DGVM.png";
+        const logo1Link = "https://upla.cl/vinculacion/";
+        const logo2Url = "https://roxanarebolledo.com/images/logo2Fondo2025.png";
+        const logo2Link = "https://upla.cl/vinculacion/2024/12/04/convocatoria-fondo-social-crealab-2025/";
+        const logo3Url = "https://upla.cl/facultad/cienciasnaturalesyexactas/wp-content/uploads/2022/09/05-fac-cs-naturales.png";
+        const logo3Link = "https://upla.cl/facultad/cienciasnaturalesyexactas/";
+        const sidebarImageUrl = "https://revistamarina.cl/storage/app/uploads/public/cbe/c1f/46b/thumb__844_406_0_0_crop.jpg";
+
+        // --- Datos del Curso ---
+        const courseData = {
+            descripcion: {
+                icon: 'info',
+                title: "Descripción del Curso",
+                details: [
+                    "Curso: Inteligencia Artificial Generativa para la Gestión Docente",
+                    "Duración total: 20 horas (asincrónicas, sincrónicas optativas y de trabajo autónomo)",
+                    "Destinatarios: Docentes de cualquier disciplina y nivel educativo."
+                ],
+                objectiveTitle: "Objetivo General",
+                objectiveIcon: 'target',
+                objectiveContent: "Desarrollar habilidades y conocimientos para integrar eficazmente herramientas de Inteligencia Artificial en la gestión docente, optimizando la creación de recursos, automatización de tareas, acompañamiento al estudiantado y procesos de evaluación."
+            },
+            bloque1: {
+                icon: 'book-open',
+                title: "1: Aprendizaje adaptativo",
+                content: "Descubre cómo utilizar la IA para crear rutas de aprendizaje personalizadas que se ajustan al ritmo y estilo de cada estudiante. Se explorarán herramientas para generar material didáctico que responda a las necesidades individuales, fomentando un aprendizaje más profundo y significativo."
+            },
+            bloque2: {
+                icon: 'cpu',
+                title: "2: Automatización de tareas",
+                content: "Aprende a optimizar tu tiempo utilizando la IA para automatizar tareas administrativas y repetitivas. Desde la planificación de clases y la creación de presentaciones, hasta la gestión de comunicaciones y la organización de recursos, este módulo te enseñará a delegar trabajo a la tecnología para centrarte en lo que más importa: la enseñanza."
+            },
+            bloque3: {
+                icon: 'award',
+                title: "3: Evaluación de proceso y resultado",
+                content: "Explora cómo la IA puede transformar los procesos de evaluación. Se abordará la creación de instrumentos de evaluación formativa y sumativa, la generación de rúbricas detalladas y la entrega de retroalimentación automatizada y personalizada, permitiendo un seguimiento más eficiente y detallado del progreso del estudiantado."
+            },
+            bloque4: {
+                icon: 'puzzle',
+                title: "4: Juegos interactivos",
+                content: "Sumérgete en el mundo de la gamificación y aprende a diseñar experiencias de aprendizaje lúdicas. Este módulo te enseñará a utilizar herramientas de IA para crear juegos interactivos que capturen la atención de los estudiantes y refuercen los contenidos curriculares de manera entretenida y efectiva."
+            },
+            evaluacion: {
+                icon: 'award',
+                title: "Evaluación Final Integradora",
+                content: "Diseño de una propuesta de integración de IA en su práctica docente, que debe incluir:",
+                details: [
+                    "Una actividad de aprendizaje adaptativo diseñada con IA.",
+                    "Un ejemplo de tarea administrativa automatizada.",
+                    "Un instrumento de evaluación innovador generado con IA.",
+                    "Diseño de juego interactivo."
+                ],
+                summary: "La presentación de esta propuesta demostrará la aplicación práctica de las herramientas y estrategias aprendidas en el curso."
+            },
+            relatora: {
+                icon: 'user',
+                title: "Docente a cargo",
+                content: "",
+                name: "Roxana Rebolledo Font de la Vall",
+                details: [
+                    "Profesora de Inglés y Licenciada en Educación",
+                    "Magíster en Comunicación Educativa y NTIC",
+                    "Doctora (c) en Tecnología Educativa",
+                    "Certificada en Moodle (MEC)"
+                ],
+                website: "roxanarebolledo.com",
+                experienceUrl: "https://roxanarebolledo.com/experiencia",
+                videoUrl: "https://www.youtube.com/embed/TaLu30YkTTg?si=HB-avSZ1-1GT2tkx"
+            }
+        };
+
+        // --- Estado de la aplicación ---
+        let activeSection = 'descripcion';
+        let isSidebarOpen = false;
+
+        // --- Elementos del DOM ---
+        const sidebar = document.getElementById('sidebar');
+        const contentArea = document.getElementById('content-area');
+        const courseTitleHeader = document.getElementById('course-title-header');
+        const menuButton = document.getElementById('menu-button');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+        // --- Funciones de renderizado ---
+
+        /**
+         * Renderiza la barra lateral de navegación.
+         */
+        function renderSidebar() {
+            const navItems = [
+                { id: 'descripcion', label: 'Descripción del Curso' },
+                { id: 'bloque1', label: '1: Aprendizaje Adaptativo' },
+                { id: 'bloque2', label: '2: Automatización de Tareas' },
+                { id: 'bloque3', label: '3: Evaluación de Proceso' },
+                { id: 'bloque4', label: '4: Juegos Interactivos' },
+                { id: 'evaluacion', label: 'Evaluación Final' },
+                { id: 'relatora', label: 'Docente a cargo' },
+            ];
+
+            const navListHTML = navItems.map(item => {
+                const iconName = courseData[item.id]?.icon;
+                if (!iconName) return '';
+                const isActive = activeSection === item.id;
+                const activeClasses = 'bg-sky-500 text-white shadow-lg';
+                const inactiveClasses = 'hover:bg-sky-100 text-gray-700';
+                
+                return `
+                    <li class="mb-2">
+                        <a href="#" data-section="${item.id}" class="nav-link flex items-center p-3 rounded-lg transition-all duration-300 transform hover:scale-105 ${isActive ? activeClasses : inactiveClasses}">
+                            <i data-lucide="${iconName}" class="mr-3 flex-shrink-0 w-5 h-5"></i>
+                            <span class="font-medium">${item.label}</span>
+                        </a>
+                    </li>
+                `;
+            }).join('');
+
+            sidebar.innerHTML = `
+                <div class="w-full h-full bg-white text-gray-800 p-5 flex flex-col border-r border-gray-200">
+                    <div class="relative mb-6 pb-4 border-b">
+                        <img src="${sidebarImageUrl}" alt="Cabecera del curso" class="w-full rounded-lg" />
+                        <button id="close-sidebar-button" class="lg:hidden text-gray-600 hover:text-gray-900 absolute top-2 right-2 bg-white/70 backdrop-blur-sm rounded-full p-1">
+                            <i data-lucide="x" class="w-6 h-6"></i>
+                        </button>
                     </div>
-                    <span className="text-gray-800">{detail}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {summary && (
-             <div className="mt-6 p-4 bg-sky-50 border-l-4 border-sky-500 rounded-r-lg">
-                <p className="text-sky-900 font-medium">{summary}</p>
-             </div>
-          )}
-
-          {(website || experienceUrl) && (
-            <div className="mt-6 flex flex-wrap gap-4">
-              {website && (
-                <a href={`https://${website}`} target="_blank" rel="noopener noreferrer" className="inline-block bg-sky-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-sky-700 transition-colors shadow-md">
-                  Visitar Sitio Web
-                </a>
-              )}
-              {experienceUrl && (
-                <a href={experienceUrl} target="_blank" rel="noopener noreferrer" className="inline-block bg-gray-700 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-800 transition-colors shadow-md">
-                  Experiencia en IA
-                </a>
-              )}
-            </div>
-          )}
-
-          {videoUrl && (
-            <div className="mt-8">
-                <h3 className="text-xl font-semibold text-gray-800 mb-4 border-b-2 border-sky-200 pb-2">Video de Presentación</h3>
-                <div className="relative w-full" style={{ paddingTop: '56.25%' }}>
-                    <iframe
-                        className="absolute top-0 left-0 w-full h-full rounded-lg shadow-lg"
-                        src={videoUrl}
-                        title="YouTube video player"
-                        frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        referrerPolicy="strict-origin-when-cross-origin"
-                        allowFullScreen
-                    ></iframe>
+                    <nav class="flex-grow">
+                        <ul>${navListHTML}</ul>
+                    </nav>
+                    <div class="mt-4">
+                        <a href="https://forms.gle/cGMrbJnEtpi1BGD97" target="_blank" rel="noopener noreferrer" class="block bg-sky-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-sky-700 transition-all duration-300 shadow-lg text-center transform hover:scale-105">
+                            Inscripciones
+                        </a>
+                    </div>
+                    <div class="mt-auto text-center text-xs text-gray-400 pt-4">
+                        <p>Capacitación Docente 2025</p>
+                    </div>
                 </div>
-            </div>
-          )}
-        </div>
-        
-        {/* --- Logos Section --- */}
-        {sectionId === 'descripcion' && (
-          <div className="mt-8 pt-8 border-t border-gray-200">
-            <h3 className="text-center text-lg font-semibold text-gray-600 mb-6">Organizan:</h3>
-            <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
-                <a href={logo1Link} target="_blank" rel="noopener noreferrer">
-                    <img src={logo1Url} alt="Logo DGVM" className="h-16 md:h-20" />
-                </a>
-                <a href={logo2Link} target="_blank" rel="noopener noreferrer">
-                    <img src={logo2Url} alt="Logo Fondo 2025" className="h-16 md:h-20" />
-                </a>
-                <a href={logo3Link} target="_blank" rel="noopener noreferrer">
-                    <img src={logo3Url} alt="Logo FCNA" className="h-16 md:h-20" />
-                </a>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
+            `;
+            // Re-activar los iconos de Lucide
+            lucide.createIcons();
+        }
 
+        /**
+         * Renderiza el contenido de la sección activa.
+         * @param {string} sectionId - El ID de la sección a renderizar.
+         */
+        function renderContent(sectionId) {
+            const section = courseData[sectionId];
+            if (!section) return;
 
-// --- Componente Principal de la Aplicación ---
-export default function App() {
-  const [activeSection, setActiveSection] = useState('descripcion');
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const courseTitle = courseData.descripcion.details[0].replace('Curso: ', '');
+            const { icon, title, content, name, details, summary, website, videoUrl, experienceUrl, objectiveTitle, objectiveContent, objectiveIcon } = section;
 
+            // Generar lista de detalles si existe
+            const detailsHTML = details ? `
+                <div class="${objectiveTitle ? 'mt-6 pt-6 border-t border-gray-200' : 'mb-6'}">
+                    <ul class="space-y-3">
+                        ${details.map(detail => `
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0 h-6 w-6 rounded-full bg-sky-100 text-sky-700 flex items-center justify-center mr-3 mt-1">
+                                    <span class="font-bold text-sm">✓</span>
+                                </div>
+                                <span class="text-gray-800">${detail}</span>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+            ` : '';
 
-  if (!courseData[activeSection]) {
-      setActiveSection('descripcion');
-  }
+            // Generar sección de objetivo si existe
+            const objectiveHTML = objectiveTitle && objectiveContent ? `
+                <div class="mb-6">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
+                        <i data-lucide="${objectiveIcon}" class="mr-3 text-sky-600 w-6 h-6"></i>
+                        ${objectiveTitle}
+                    </h3>
+                    <p class="text-lg text-gray-700 leading-relaxed">${objectiveContent}</p>
+                </div>
+            ` : '';
+            
+            // Generar sección de logos (solo para 'descripcion')
+            const logosHTML = sectionId === 'descripcion' ? `
+                <div class="mt-8 pt-8 border-t border-gray-200">
+                    <h3 class="text-center text-lg font-semibold text-gray-600 mb-6">Organizan:</h3>
+                    <div class="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+                        <a href="${logo1Link}" target="_blank" rel="noopener noreferrer">
+                            <img src="${logo1Url}" alt="Logo DGVM" class="h-16 md:h-20" />
+                        </a>
+                        <a href="${logo2Link}" target="_blank" rel="noopener noreferrer">
+                            <img src="${logo2Url}" alt="Logo Fondo 2025" class="h-16 md:h-20" />
+                        </a>
+                        <a href="${logo3Link}" target="_blank" rel="noopener noreferrer">
+                            <img src="${logo3Url}" alt="Logo FCNA" class="h-16 md:h-20" />
+                        </a>
+                    </div>
+                </div>
+            ` : '';
 
-  return (
-    <div className="flex h-screen bg-gray-100 font-sans">
-      {/* Overlay for mobile */}
-      {sidebarOpen && (
-        <div 
-            className="fixed inset-0 bg-black bg-opacity-50 z-20 lg:hidden"
-            onClick={() => setSidebarOpen(false)}
-        ></div>
-      )}
+            // Generar video si existe
+            const videoHTML = videoUrl ? `
+                <div class="mt-8">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b-2 border-sky-200 pb-2">Video de Presentación</h3>
+                    <div class="relative w-full" style="padding-top: 56.25%;">
+                        <iframe
+                            class="absolute top-0 left-0 w-full h-full rounded-lg shadow-lg"
+                            src="${videoUrl}"
+                            title="YouTube video player"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin"
+                            allowfullscreen
+                        ></iframe>
+                    </div>
+                </div>
+            ` : '';
 
-      {/* Sidebar */}
-      <aside className={`fixed lg:relative inset-y-0 left-0 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transition-transform duration-300 ease-in-out w-72 h-full z-30 shadow-2xl lg:shadow-none`}>
-        <Sidebar activeSection={activeSection} setActiveSection={setActiveSection} setSidebarOpen={setSidebarOpen} />
-      </aside>
+            // Generar botones de enlace si existen
+            const linksHTML = (website || experienceUrl) ? `
+                <div class="mt-6 flex flex-wrap gap-4">
+                    ${website ? `<a href="https://${website}" target="_blank" rel="noopener noreferrer" class="inline-block bg-sky-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-sky-700 transition-colors shadow-md">Visitar Sitio Web</a>` : ''}
+                    ${experienceUrl ? `<a href="${experienceUrl}" target="_blank" rel="noopener noreferrer" class="inline-block bg-gray-700 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-800 transition-colors shadow-md">Experiencia en IA</a>` : ''}
+                </div>
+            ` : '';
 
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col h-screen">
-        {/* Main Header with Title and Logo */}
-        <div className="w-full bg-gradient-to-r from-sky-400 to-sky-600 p-4 shadow-lg border-b border-sky-700 z-10 flex items-center justify-center relative">
-            <button onClick={() => setSidebarOpen(true)} className="lg:hidden text-white absolute left-4">
-                <Menu size={28} />
-            </button>
-            <h1 className="text-xl md:text-3xl font-bold text-white text-center tracking-wide">{courseTitle}</h1>
-        </div>
+            contentArea.innerHTML = `
+                <div class="p-6 sm:p-8 lg:p-10 w-full bg-sky-50">
+                    <div class="max-w-4xl mx-auto">
+                        <div class="flex items-center text-gray-800 mb-6">
+                            <div class="p-3 bg-white rounded-full shadow-md mr-4">
+                                <i data-lucide="${icon}" class="text-sky-600 w-8 h-8"></i>
+                            </div>
+                            <h1 class="text-3xl lg:text-4xl font-bold tracking-tight">${title}</h1>
+                        </div>
+                        
+                        <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+                            ${content ? `<p class="text-lg text-gray-700 leading-relaxed mb-6">${content}</p>` : ''}
+                            ${name ? `<h2 class="text-2xl font-semibold text-gray-800 mb-4">${name}</h2>` : ''}
+                            ${objectiveHTML}
+                            ${detailsHTML}
+                            ${summary ? `<div class="mt-6 p-4 bg-sky-50 border-l-4 border-sky-500 rounded-r-lg"><p class="text-sky-900 font-medium">${summary}</p></div>` : ''}
+                            ${linksHTML}
+                            ${videoHTML}
+                        </div>
+                        
+                        ${logosHTML}
+                    </div>
+                </div>
+            `;
+            // Re-activar los iconos de Lucide
+            lucide.createIcons();
+        }
 
-        <div className="flex-1 overflow-y-auto">
-            <Content sectionId={activeSection} />
-        </div>
-      </main>
-    </div>
-  );
-}
+        // --- Manejadores de eventos ---
+
+        /**
+         * Cambia la sección activa y vuelve a renderizar el contenido y la barra lateral.
+         * @param {string} newSectionId - El nuevo ID de sección.
+         */
+        function setActiveSection(newSectionId) {
+            if (courseData[newSectionId]) {
+                activeSection = newSectionId;
+                renderSidebar();
+                renderContent(activeSection);
+            }
+        }
+
+        /**
+         * Controla la visibilidad de la barra lateral en móviles.
+         * @param {boolean} open - True para abrir, false para cerrar.
+         */
+        function setSidebarOpen(open) {
+            isSidebarOpen = open;
+            if (open) {
+                sidebar.classList.remove('-translate-x-full');
+                sidebar.classList.add('translate-x-0');
+                sidebarOverlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.remove('translate-x-0');
+                sidebar.classList.add('-translate-x-full');
+                sidebarOverlay.classList.add('hidden');
+            }
+        }
+
+        // --- Inicialización y asignación de eventos ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Establecer el título del curso en la cabecera
+            courseTitleHeader.textContent = courseData.descripcion.details[0].replace('Curso: ', '');
+
+            // Renderizar el estado inicial
+            renderSidebar();
+            renderContent(activeSection);
+
+            // Evento para los enlaces de navegación
+            sidebar.addEventListener('click', (e) => {
+                const link = e.target.closest('.nav-link');
+                if (link) {
+                    e.preventDefault();
+                    const sectionId = link.dataset.section;
+                    setActiveSection(sectionId);
+                    setSidebarOpen(false); // Cerrar al seleccionar una opción
+                }
+                
+                const closeButton = e.target.closest('#close-sidebar-button');
+                if (closeButton) {
+                    setSidebarOpen(false);
+                }
+            });
+            
+            // Eventos para el menú móvil
+            menuButton.addEventListener('click', () => setSidebarOpen(true));
+            sidebarOverlay.addEventListener('click', () => setSidebarOpen(false));
+        });
+    </script>
+</body>
+</html>
